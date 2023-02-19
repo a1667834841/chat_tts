@@ -1,12 +1,12 @@
 var recordStatus = 0
-
+var voice;
 window.onload = function () {
-  const startBtn = document.querySelector('.message-voice');
+ 
   const messageInput = document.querySelector(".message-input")
   let times = null;
 
   // 实例化迅飞语音听写（流式版）WebAPI
-  const voice = new Voice({
+  voice = new Voice({
 
     // 服务接口认证信息 注：apiKey 和 apiSecret 的长度都差不多，请要填错哦，！
     appId: 'd9514f5c',
@@ -36,25 +36,57 @@ window.onload = function () {
   });
 
   // 开始识别
-  startBtn['onclick'] = function () {
-    recordStatus++;
-    if ((recordStatus % 2) == 0) {
-      voice.stop();
-      startBtn.innerHTML = " 录制声音 "
-      startBtn.style.background = '#1D7745';
-    } else {
-      voice.start();
-      startBtn.innerHTML = " 录制中 "
-      startBtn.style.background = 'red';
-    }
+  // var recordBtns = document.querySelector('.swiper-slide');
+  // for(var recordBtn in recordBtns) {
+  //   recordBtn['onclick'] = function () {
+  //     recordStatus++;
+  //     if ((recordStatus % 2) == 0) {
+  //       voice.stop();
+  //       recordBtn.innerHTML = " 录制声音 "
+  //       recordBtn.style.background = '#1D7745';
+  //     } else {
+  //       voice.start();
+  //       recordBtn.innerHTML = " 录制中 "
+  //       recordBtn.style.background = 'red';
+  //     }
+  
+  //   };
+  // }
+ 
 
-  };
+};
 
-  // // 关闭识别
-  // startBtn['onmouseup'] = function () {
-  //     voice.stop();
-  //     // fixedBox.style.display = 'none';
-  // };
+
+function recordZhVoice () {
+  voice.setLanguage("zh_cn");
+  let recordBtn = document.querySelector('#zh');
+  recordStatus++;
+  if ((recordStatus % 2) == 0) {
+    voice.stop();
+    recordBtn.innerHTML = " 录制声音（中文） "
+    recordBtn.style.background = '#1D7745';
+  } else {
+    voice.start();
+    recordBtn.innerHTML = " 录制中 "
+    recordBtn.style.background = 'red';
+  }
+
+};
+
+function recordEnVoice () {
+  voice.setLanguage("en_us");
+  let recordBtn = document.querySelector('#en');
+  recordStatus++;
+  if ((recordStatus % 2) == 0) {
+    voice.stop();
+    recordBtn.innerHTML = " 录制声音（英文） "
+    recordBtn.style.background = '#1D7745';
+  } else {
+    voice.start();
+    recordBtn.innerHTML = " 录制中 "
+    recordBtn.style.background = 'red';
+  }
+
 };
 
 
@@ -168,6 +200,7 @@ function testfakeMessage() {
 
   ask(msg).then(function (data) {
     let answer = data.message
+    textToVoice(answer)
     $('.message.loading').remove();
     $('<div class="message new"><figure class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>' + answer + '</div>').appendTo($('.mCSB_container')).addClass('new');
     setDate();
@@ -182,8 +215,13 @@ function testfakeMessage() {
 
 }
 
-
+// 发送问题
 function ask(question) {
+
+  if(!question) {
+    console.log("ask nothing was valid")
+    return
+  }
 
   // 准备 POST 请求参数
   var postData = {
@@ -222,12 +260,72 @@ function ask(question) {
 
 
 
-
-  // 发送 POST 请求
-  $.post("http://127.0.0.1:9092/tool/gpt/text/ask", JSON.stringify(postData), function (response) {
-    console.log("Response:", response);
-  }).fail(function (jqXHR, textStatus, errorThrown) {
-    console.error("Error:", textStatus, errorThrown);
-  });
 }
+
+
+  // 文字转语音
+  function textToVoice(text) {
+    
+    if(!text) {
+      console.log("text nothing was valid")
+      return
+    }
+    // 准备 POST 请求参数
+    var paramsDto = {
+      "locale": hasChinese(text) ? "zh-CN" : "en-US",
+      "voice":  hasChinese(text) ? "zh-CN-YunxiNeural" : "en-US-GuyNeural",
+      "style": "general",
+      "voiceRate": 0,
+      "voicePitch": 0,
+      "content": text,
+    };
+  
+    let ctx = new AudioContext();
+  
+        // 返回一个 Promise 对象
+    return new Promise(function (resolve, reject) {
+      fetch('https://toolkit.show/tool/audio/play/sync/tts', {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        }),
+        body:JSON.stringify(paramsDto)
+      })
+        .then(function (response) {
+          // 检查响应状态码
+          if (response.ok) {
+            // 返回响应结果的 byte 格式
+            return response.arrayBuffer()
+          } else {
+            // 如果响应状态码不是 200，抛出一个错误
+            throw new Error("Network response was not ok.");
+          }
+        }).then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+        .then(audio => {
+          // 处理响应结果
+          let player = ctx.createBufferSource();
+          player.buffer = audio;
+          player.connect(ctx.destination);
+          player.start(ctx.currentTime);
+          resolve(audio);
+        })
+        .catch(function (error) {
+          // 处理错误
+          reject(error);
+        });
+  
+    })
+    }
+
+// 判断字符串是否包含中文
+function hasChinese(str) {
+  return /[\u4E00-\u9FA5]+/g.test(str)
+}
+
+
+var mySwiper = new Swiper('.swiper-container', {
+  // Optional parameters
+  direction: 'horizontal',
+  loop: false,
+});
 

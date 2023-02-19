@@ -339,8 +339,8 @@ Message Box
 
 .message-box .message-voice {
   position: absolute;
+  left: 10px;
   z-index: 1;
-  top: 9px;
   text-align:center;
   color: #fff;
   border: none;
@@ -353,11 +353,15 @@ Message Box
   outline: none !important;
   transition: background 0.2s ease;
   width: 70%;
+  /* align-items: center;
+  justify-content: center;
+  display: flex; */
+
 }
 
-.message-box .message-voice:hover {
+/* .message-box .message-voice:hover {
   background: #03e468;
-}
+} */
 
 /*--------------------
 Custom Srollbar
@@ -476,4 +480,12 @@ Bounce
   to {
     transform: translateY(-10px);
   }
+}
+
+
+
+.swiper-container {
+  width: 100%;
+  height: 30px;
+  /* margin-top: 200px; */
 }

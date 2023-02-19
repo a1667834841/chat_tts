@@ -99,6 +99,9 @@
             language && (this.language = language)
             accent && (this.accent = accent)
         };
+        setLanguage(language) {
+            language && (this.language = language)
+        };
         // 对处理后的音频数据进行base64编码，
         toBase64(buffer) {
             let binary = '';
