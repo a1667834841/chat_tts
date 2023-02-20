@@ -333,11 +333,12 @@ Message Box
   border-radius: 10px;
   outline: none !important;
   transition: background 0.2s ease;
+  transition: transform 0.3s ease-out;
   width: 20%;
 }
 
-.message-box .message-submit:hover {
-  background: #03e468;
+.message-box .message-submit:active {
+  transform: scale(1.05,1.05);
 }
 
 
@@ -355,12 +356,17 @@ Message Box
   padding: 10px 10px;
   border-radius: 10px;
   outline: none !important;
-  transition: background 0.2s ease;
+  transition: background 0.4s ease;
+  transition: transform 0.3s ease-out;
   width: 70%;
   /* align-items: center;
   justify-content: center;
   display: flex; */
 
+}
+
+.message-box .message-voice:active {
+  transform: scale(1.05,1.05);
 }
 
 /* .message-box .message-voice:hover {

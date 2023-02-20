@@ -364,7 +364,7 @@ function ipPass() {
   $.getJSON('https://api.ipify.org/?format=json', function(data){
     console.log(data);
     // 判断ip是否可以访问
-    if (data.ip != "165.154.230.201") {
+    if (data.ip != "165.154.230.203") {
       showPopup()
     }
 });
