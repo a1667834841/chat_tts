@@ -39,7 +39,16 @@ Hope you like it :)
 
   <div class="chat">
     <div class="chat-title">
-      <h1>English chater</h1>
+      <h1>English chater
+        <span class="busuanzi">
+          <span id="busuanzi_container_site_pv">
+            本站总访问量：<span id="busuanzi_value_site_pv"></span>次
+            <br>
+            本站访客数<span id="busuanzi_value_site_uv"></span>人次
+          </span>
+        </span>
+        
+      </h1>
       <h2>Supah</h2>
       <figure class="avatar">
         <img src="./img/profile-80.jpg" />
@@ -56,11 +65,12 @@ Hope you like it :)
     <div class="message-box " style="margin: 0 0;">
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="message-voice" id="zh" onclick="recordZhVoice()"> 录制声音（中文） </div>
-          </div>
+         
           <div class="swiper-slide">
             <div class="message-voice" id="en" onclick="recordEnVoice()"> 录制声音 （英语） </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="message-voice" id="zh" onclick="recordZhVoice()"> 录制声音（中文） </div>
           </div>
         </div>
 
@@ -72,6 +82,20 @@ Hope you like it :)
 
     </div>
 
+
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <div class="popup-header">关注公众号【ggball】<br>获取【暗号】</div>
+    <div class="popup-body">
+      <img class="openImg" alt="公众号">
+      <div class="popup-input">
+        <input id="secretCode" type="text" placeholder="请输入暗号">
+        <button onclick="closePopup()">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
   <div class="bg"></div>
   <!-- partial -->
@@ -79,7 +103,8 @@ Hope you like it :)
   <script src="./js/crypto-js.min.js"></script>
   <script src="./js/voice.js"></script>
   <script src='./js/jquery.mCustomScrollbar.concat.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.0/js/swiper.min.js'></script>
+  <script src='./js/swiper.min.js'></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script src="./js/script.js"></script>
 
 

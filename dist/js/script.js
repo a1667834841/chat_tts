@@ -1,6 +1,9 @@
 var recordStatus = 0
 var voice;
 window.onload = function () {
+
+  // ip判断
+  ipPass();
  
   const messageInput = document.querySelector(".message-input")
   let times = null;
@@ -35,23 +38,7 @@ window.onload = function () {
     }
   });
 
-  // 开始识别
-  // var recordBtns = document.querySelector('.swiper-slide');
-  // for(var recordBtn in recordBtns) {
-  //   recordBtn['onclick'] = function () {
-  //     recordStatus++;
-  //     if ((recordStatus % 2) == 0) {
-  //       voice.stop();
-  //       recordBtn.innerHTML = " 录制声音 "
-  //       recordBtn.style.background = '#1D7745';
-  //     } else {
-  //       voice.start();
-  //       recordBtn.innerHTML = " 录制中 "
-  //       recordBtn.style.background = 'red';
-  //     }
-  
-  //   };
-  // }
+
  
 
 };
@@ -170,7 +157,7 @@ $(window).on('keydown', function (e) {
 })
 
 var Fake = [
-  'Hi there, I\'m Fabio and you?'
+  'Hello budy, I\'m Fabio and you?'
 ]
 
 function fakeMessage() {
@@ -194,24 +181,24 @@ function testfakeMessage() {
   if ($('.message-input').val() != '') {
     return false;
   }
-  $('<div class="message loading new"><figure class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure><span></span></div>').appendTo($('.mCSB_container'));
+  $('<div class="message loading new"><figure class="avatar"><img src="./img/profile-80.jpg" /></figure><span></span></div>').appendTo($('.mCSB_container'));
   updateScrollbar();
 
 
   ask(msg).then(function (data) {
     let answer = data.message
-    textToVoice(answer)
+    if (data.code == 200) {
+      textToVoice(answer)
+    }
+    
     $('.message.loading').remove();
-    $('<div class="message new"><figure class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>' + answer + '</div>').appendTo($('.mCSB_container')).addClass('new');
+    $('<div class="message new" style = "white-space: pre-line;"><figure class="avatar"><img src="./img/profile-80.jpg" /></figure>' + answer + '</div>').appendTo($('.mCSB_container')).addClass('new');
     setDate();
     updateScrollbar();
   }).catch(function(error) {
     console.error("Error:", error);
   });
 
-  // setTimeout(function () {
-   
-  // }, 1000 + (Math.random() * 20) * 100);
 
 }
 
@@ -243,8 +230,10 @@ function ask(question) {
           // 返回响应结果的 JSON 格式
           return response.json();
         } else {
+          console.log("Network response was not ok.");
+          return {"message":"抱歉，服务超时！请重试！","code":503}
           // 如果响应状态码不是 200，抛出一个错误
-          throw new Error("Network response was not ok.");
+         
         }
       })
       .then(function (data) {
@@ -329,3 +318,55 @@ var mySwiper = new Swiper('.swiper-container', {
   loop: false,
 });
 
+
+// 弹出层逻辑
+
+var openInfos = [
+  {
+    "pic":"./img/0.jpg",
+    "name":"关注公众号<br>【Drew小哥】<br>发送【chat】获取暗号"
+  },
+  {
+    "pic":"./img/1.jpg",
+    "name":"关注公众号<br>【ggball coding】<br>发送【chat】获取暗号"
+  }
+]
+
+function showPopup() {
+  var popup = document.getElementById("popup");
+  popup.style.display = "block";
+
+  let i = parseInt(Math.random()*10 % 2)
+  document.querySelector(".openImg").setAttribute("src",openInfos[i]["pic"]);
+  document.querySelector(".popup-header").innerHTML = openInfos[i]["name"];
+
+}
+
+
+function closePopup() {
+  var popup = document.getElementById("popup");
+  var secretCode = document.getElementById("secretCode");
+  let code = secretCode.value
+  if (code == "chat2023") {
+    popup.style.display = "none";
+  } else{
+    alert("错误暗号！请关注公众号，发送【chat】获取暗号")
+  }
+  
+}
+
+
+// 工具
+
+function ipPass() {
+
+
+  $.getJSON('https://api.ipify.org/?format=json', function(data){
+    console.log(data);
+    // 判断ip是否可以访问
+    if (data.ip != "165.154.230.201") {
+      showPopup()
+    }
+});
+
+}
