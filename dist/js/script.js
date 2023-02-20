@@ -1,9 +1,6 @@
 var recordStatus = 0
 var voice;
 window.onload = function () {
-
-  // ip判断
-  ipPass();
  
   const messageInput = document.querySelector(".message-input")
   let times = null;
@@ -187,9 +184,12 @@ function testfakeMessage() {
 
   ask(msg).then(function (data) {
     let answer = data.message
-    if (data.code == 200) {
-      textToVoice(answer)
+    if (answer.startsWith("\n\n")) {
+      answer = answer.substring(2)
     }
+    // if (data.status == 200) {
+    //   textToVoice(answer)
+    // }
     
     $('.message.loading').remove();
     $('<div class="message new" style = "white-space: pre-line;"><figure class="avatar"><img src="./img/profile-80.jpg" /></figure>' + answer + '</div>').appendTo($('.mCSB_container')).addClass('new');
@@ -217,10 +217,12 @@ function ask(question) {
 
   // 返回一个 Promise 对象
   return new Promise(function (resolve, reject) {
+
     fetch('https://toolkit.show/tool/gpt/text/ask', {
       method: 'POST',
       headers: new Headers({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'ipAddr': getIp(), 
       }),
       body:JSON.stringify(postData)
     })
@@ -235,8 +237,13 @@ function ask(question) {
           // 如果响应状态码不是 200，抛出一个错误
          
         }
+        
+
       })
       .then(function (data) {
+        if (data.status == 700) {
+          showPopup()
+        }
         // 处理响应结果
         resolve(data);
       })
@@ -253,7 +260,7 @@ function ask(question) {
 
 
   // 文字转语音
-  function textToVoice(text) {
+function textToVoice(text) {
     
     if(!text) {
       console.log("text nothing was valid")
@@ -271,7 +278,7 @@ function ask(question) {
   
     let ctx = new AudioContext();
   
-        // 返回一个 Promise 对象
+    // 返回一个 Promise 对象
     return new Promise(function (resolve, reject) {
       fetch('https://toolkit.show/tool/audio/play/sync/tts', {
         method: 'POST',
@@ -305,6 +312,53 @@ function ask(question) {
   
     })
     }
+
+function bindKeyWord(keyWord) {
+
+      // 返回一个 Promise 对象
+      return new Promise(function (resolve, reject) {
+
+          fetch('https://toolkit.show/tool/watermark/wx/bindIp?keyWord='+keyWord, {
+            method: 'POST',
+            headers: new Headers({
+              'ipAddr': getIp(), 
+            }),
+          })
+            .then(function (response) {
+              // 检查响应状态码
+              if (response.ok) {
+                // 返回响应结果的 byte 格式
+                return response.json()
+              } else {
+                alert("Network response was not ok")
+                // 如果响应状态码不是 200，抛出一个错误
+                throw new Error("Network response was not ok.");
+              }
+            }).then(data => {
+              // 处理响应结果
+             if (data.status == 700) {
+                alert("错误暗号！请关注公众号，发送【chat】获取暗号")
+                return
+             } else  if (data.status != 200) {
+                alert("系统异常")
+                return
+             }
+  
+              // 弹窗关闭
+              var popup = document.getElementById("popup");
+              popup.style.display = "none";
+              resolve(data);
+            })
+            .catch(function (error) {
+              // 处理错误
+              reject(error);
+            });
+
+
+    
+      })
+
+} 
 
 // 判断字符串是否包含中文
 function hasChinese(str) {
@@ -344,29 +398,42 @@ function showPopup() {
 
 
 function closePopup() {
-  var popup = document.getElementById("popup");
-  var secretCode = document.getElementById("secretCode");
-  let code = secretCode.value
-  if (code == "chat2023") {
-    popup.style.display = "none";
-  } else{
-    alert("错误暗号！请关注公众号，发送【chat】获取暗号")
-  }
+  var keyWord = document.getElementById("secretCode").value;
+  bindKeyWord(keyWord)
   
 }
 
 
 // 工具
 
-function ipPass() {
+// function ipPass() {
 
 
+//   $.getJSON('https://api.ipify.org/?format=json', function(data){
+//     console.log(data);
+//     // 判断ip是否可以访问
+//     if (data.ip != "165.154.230.203") {
+//       showPopup()
+//     }
+// });
+
+// }
+
+// 获取ip
+function getIp() {
+ 
+  var ip = localStorage.getItem("ip");
+  if (ip) {
+    return ip;
+  }
+
+  $.ajaxSettings.async = false;  //设为同步请求
   $.getJSON('https://api.ipify.org/?format=json', function(data){
     console.log(data);
-    // 判断ip是否可以访问
-    if (data.ip != "165.154.230.203") {
-      showPopup()
-    }
-});
+    ip = data.ip;
+  })
+  $.ajaxSettings.async = true;  //设为异步请求
+  localStorage.setItem("ip",ip) 
+  return ip
 
 }

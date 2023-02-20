@@ -223,6 +223,21 @@ Messages
   -webkit-animation: bounce 500ms linear both;
           animation: bounce 500ms linear both;
 }
+
+.messages .message.new::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  /* background-image: url(../img/laba.svg); */
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .messages .message.loading::before {
   position: absolute;
   top: 50%;
@@ -559,7 +574,7 @@ Bounce
 
 .popup-input button {
   width: 50%;
-  margin-top: 10px;
+  margin-top: 15px;
   margin-left: 10px;
   padding: 10px;
   border-radius: 5px;
