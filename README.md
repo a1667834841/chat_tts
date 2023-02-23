@@ -6,7 +6,7 @@
 html js css
 
 ## 后台
-暂未开放 
+正在整理 暂未开放 
 利用 https://github.com/Grt1228/chatgpt-java 提供的api接入chatgpt
 
 ## 实现效果
