@@ -587,15 +587,15 @@ Bounce
 #group_img{
   position: relative;
   width: 100%;
-  width: 100%;
+  height: 100%;
   z-index: -1;
 }
 
 #group_img img{
   position: absolute; 
-  margin-top: 15%;
-  right: 6%;
-  width: 150px;
+  bottom: 0;
+  right: 5%;
+  width: 155px;
   text-align: right;
 }
 

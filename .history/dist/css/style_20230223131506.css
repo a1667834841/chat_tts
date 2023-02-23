@@ -587,33 +587,23 @@ Bounce
 #group_img{
   position: relative;
   width: 100%;
-  width: 100%;
-  z-index: -1;
+  
 }
 
 #group_img img{
   position: absolute; 
-  margin-top: 15%;
-  right: 6%;
-  width: 150px;
+  top: 100%;
+  right: 0%;
+  display: inline;
+  /* transform: translate(-50%, -50%); */
+  width: 30%;
   text-align: right;
+  z-index: -99;
 }
 
-.text-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.text-overlay p {
-  color: #fff;
-  font-size: 10px;
+#group_img h3{
+  /* position: absolute; */
+  
+  margin: 0 0;
   text-align: right;
-  margin: 0;
 }

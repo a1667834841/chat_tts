@@ -36,16 +36,6 @@ window.onload = function () {
   });
 
 
-  $.ajax({
-    url: "https://api.ipify.org/?format=json",
-    type: "get",
-    async: false,
-    success: function(data){
-      console.log(data);
-      ip = data.ip;
-      localStorage.setItem("ip",ip);
-    }
-  })
  
 
 };
@@ -433,23 +423,17 @@ function closePopup() {
 function getIp() {
  
   var ip = localStorage.getItem("ip");
-  if (ip != null && ip != 'null') {
+  if (ip) {
     return ip;
   }
-  
- 
-
 
   $.ajaxSettings.async = false;  //设为同步请求
   $.getJSON('https://api.ipify.org/?format=json', function(data){
     console.log(data);
     ip = data.ip;
-    localStorage.setItem("ip",ip) 
   })
   $.ajaxSettings.async = true;  //设为异步请求
-  // ip = returnCitySN.cip;
-  // localStorage.setItem("ip",ip) 
-  
+  localStorage.setItem("ip",ip) 
   return ip
 
 }

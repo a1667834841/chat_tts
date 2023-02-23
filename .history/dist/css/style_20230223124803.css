@@ -584,36 +584,21 @@ Bounce
   cursor: pointer;
 }
 
-#group_img{
+.group{
   position: relative;
   width: 100%;
-  width: 100%;
-  z-index: -1;
 }
 
-#group_img img{
-  position: absolute; 
-  margin-top: 15%;
-  right: 6%;
-  width: 150px;
-  text-align: right;
-}
-
-.text-overlay {
+#group_img{
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 0%;
+  right: 0%;
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.text-overlay p {
-  color: #fff;
-  font-size: 10px;
-  text-align: right;
-  margin: 0;
+#group_img{
+  position: absolute;
+  bottom: 0%;
+  right: 0%;
+  width: 100%;
 }

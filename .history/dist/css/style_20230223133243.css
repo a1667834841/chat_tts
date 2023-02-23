@@ -585,17 +585,17 @@ Bounce
 }
 
 #group_img{
-  position: relative;
-  width: 100%;
+  position: absolute;
   width: 100%;
   z-index: -1;
 }
 
 #group_img img{
   position: absolute; 
-  margin-top: 15%;
-  right: 6%;
-  width: 150px;
+  margin-top: 5%;
+  right: 10%;
+  display: inline;
+  width: 30%;
   text-align: right;
 }
 
